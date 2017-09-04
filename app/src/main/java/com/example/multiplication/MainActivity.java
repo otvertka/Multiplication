@@ -3,20 +3,25 @@ package com.example.multiplication;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class MainActivity extends AppCompatActivity{
 
     Random random = new Random();
 
-    TextView tvNumber1;
-    TextView tvNumber2;
-    TextView tvResult;
 
-    Button btn;
+    @BindView(R.id.tvNumber1)
+    TextView tvNumber1;
+    @BindView(R.id.tvNumber2)
+    TextView tvNumber2;
+    @BindView(R.id.tvResult)
+    TextView tvResult;
 
     int a, b, c;
 
@@ -26,18 +31,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        tvNumber1 = (TextView)findViewById(R.id.tvNumber1);
-        tvNumber2 = (TextView)findViewById(R.id.tvNumber2);
-        tvResult = (TextView)findViewById(R.id.tvResult);
-
-        btn = (Button)findViewById(R.id.button);
-        btn.setOnClickListener(this);
+        ButterKnife.bind(this);
     }
 
-
-
-    @Override
+    @OnClick(R.id.button)
     public void onClick(View view) {
         if (!proverka){
             a = random.nextInt(100) + 1;
