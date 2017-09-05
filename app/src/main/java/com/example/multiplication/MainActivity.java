@@ -3,6 +3,7 @@ package com.example.multiplication;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.GridLayout;
 import android.widget.TextView;
 
 import java.util.Random;
@@ -15,7 +16,6 @@ public class MainActivity extends AppCompatActivity{
 
     Random random = new Random();
 
-
     @BindView(R.id.tvNumber1)
     TextView tvNumber1;
     @BindView(R.id.tvNumber2)
@@ -25,13 +25,17 @@ public class MainActivity extends AppCompatActivity{
 
     int a, b, c;
 
-    boolean proverka = false;
+    boolean proverka = false; // показать/скрыть ответ
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+/*
+        GridLayout.LayoutParams params = (GridLayout.LayoutParams) child.getLayoutParams();
+        params.width = (parent.getWidth()/parent.getColumnCount()) -params.rightMargin - params.leftMargin;
+        child.setLayoutParams(params);*/
     }
 
     @OnClick(R.id.button)
