@@ -1,8 +1,11 @@
 package com.example.multiplication;
 
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
@@ -11,6 +14,7 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 
 public class MainActivity extends AppCompatActivity{
 
@@ -23,6 +27,27 @@ public class MainActivity extends AppCompatActivity{
     @BindView(R.id.tvResult)
     TextView tvResult;
 
+    @BindView(R.id.btn0)
+    Button btn0;
+    @BindView(R.id.btn1)
+    Button btn1;
+    @BindView(R.id.btn2)
+    Button btn2;
+    @BindView(R.id.btn3)
+    Button btn3;
+    @BindView(R.id.btn4)
+    Button btn4;
+    @BindView(R.id.btn5)
+    Button btn5;
+    @BindView(R.id.btn6)
+    Button btn6;
+    @BindView(R.id.btn7)
+    Button btn7;
+    @BindView(R.id.btn8)
+    Button btn8;
+    @BindView(R.id.btn9)
+    Button btn9;
+
     int a, b, c;
 
     boolean proverka = false; // показать/скрыть ответ
@@ -32,10 +57,7 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-/*
-        GridLayout.LayoutParams params = (GridLayout.LayoutParams) child.getLayoutParams();
-        params.width = (parent.getWidth()/parent.getColumnCount()) -params.rightMargin - params.leftMargin;
-        child.setLayoutParams(params);*/
+
     }
 
     @OnClick(R.id.button)
