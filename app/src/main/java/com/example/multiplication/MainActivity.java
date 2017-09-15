@@ -16,8 +16,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static android.R.attr.x;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+
+public class MainActivity extends AppCompatActivity {
 
     Random random = new Random();
 
@@ -29,8 +31,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView tvResult;
     @BindView(R.id.tv)
     TextView tv;
-    @BindView(R.id.editText)
-    EditText editText;
 
     /*@BindView(R.id.btn0)
     Button btn0;
@@ -53,7 +53,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @BindView(R.id.btn9)
     Button btn9;*/
 
-    int a, b, c;
+    int a, b, c, count;
+    public byte star = 0;// для звездочек ответа
+    final static int[] sizeTable = {9, 99, 999, 9999, 99999};
 
     boolean proverka = false; // показать/скрыть ответ
 
@@ -63,6 +65,61 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        init();
+
+    }
+
+    void init() {
+
+        tvResult.setText("");
+        tv.setText("");
+        count = 0;
+        star = 0;
+
+        a = random.nextInt(100) + 1;
+        tvNumber1.setText(String.valueOf(a));
+        b = random.nextInt(100) + 1;
+        tvNumber2.setText(String.valueOf(b));
+        c = a * b;
+        tvResult.setText("Ответ...");
+        //count = countDigits(c);
+        for (int i = 0; ; i++){
+            if (c <= sizeTable[i]) {
+                tv.setText("" + tv.getText() + "•");
+                count = i + 1;
+                break;
+            } else {
+                tv.setText("" + tv.getText() + "•");
+            }
+        }
+        /*for (int i = 0; i < c; i++){
+            tv.setText("" + tv.getText() + "♦");
+        }*/
+        //TODO значки как в поле чудес(закрытые)
+    }
+
+    static int countDigits(int x){
+        for (int i = 0; ; i++){
+            if (x <= sizeTable[i])
+                return i + 1;
+        }
+    }
+
+    void checkAnswer(byte x){
+
+        StringBuffer sb = new StringBuffer(tv.getText());
+        sb.replace(star, star+1, String.valueOf(x));
+        star++;
+        tv.setText(sb);
+        if (star >= count){
+            if(tv.getText().equals(String.valueOf(c))){
+                Toast.makeText(getApplicationContext(), "Правильно!!!" , Toast.LENGTH_SHORT).show();
+                init();
+            } else {
+                Toast.makeText(getApplicationContext(), "НЕ правильно!!!", Toast.LENGTH_SHORT).show();
+                init();
+            }
+        }
     }
 
     @OnClick({R.id.btn0, R.id.btn1, R.id.btn2, R.id.btn3, R.id.btn4, R.id.btn5, R.id.btn6, R.id.btn7, R.id.btn8, R.id.btn9})
@@ -70,43 +127,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (view.getId()) {
             case R.id.btn0:
-                tv.setText("" + tv.getText() + 0);
+                checkAnswer((byte) 0);
+                //tv.setText("" + tv.getText().toString().sububSequence() + 0);
                 break;
             case R.id.btn1:
-                tv.setText("" + tv.getText() + 1);
+                checkAnswer((byte) 1);
+                //tv.setText("" + tv.getText() + 1);
                 break;
             case R.id.btn2:
-                tv.setText("" + tv.getText() + 2);
+                checkAnswer((byte) 2);
+                //tv.setText("" + tv.getText() + 2);
                 break;
             case R.id.btn3:
-                tv.setText("" + tv.getText() + 3);
+                checkAnswer((byte) 3);
+                //tv.setText("" + tv.getText() + 3);
                 break;
             case R.id.btn4:
-                tv.setText("" + tv.getText() + 4);
+                checkAnswer((byte) 4);
+                //tv.setText("" + tv.getText() + 4);
                 break;
             case R.id.btn5:
-                tv.setText("" + tv.getText() + 5);
+                checkAnswer((byte) 5);
+                //tv.setText("" + tv.getText() + 5);
                 break;
             case R.id.btn6:
-                tv.setText("" + tv.getText() + 6);
+                checkAnswer((byte) 6);
+                //tv.setText("" + tv.getText() + 6);
                 break;
             case R.id.btn7:
-                tv.setText("" + tv.getText() + 7);
+                checkAnswer((byte) 7);
+                //tv.setText("" + tv.getText() + 7);
                 break;
             case R.id.btn8:
-                tv.setText("" + tv.getText() + 8);
+                checkAnswer((byte) 8);
+                //tv.setText("" + tv.getText() + 8);
                 break;
             case R.id.btn9:
+                checkAnswer((byte) 9);
                 //Toast.makeText(getApplicationContext(), "Press :" + 9, Toast.LENGTH_SHORT).show();
-                tv.setText("" + tv.getText() + 9);
+                //tv.setText("" + tv.getText() + 9);
                 break;
-        }
-        if(tv.getText().equals(String.valueOf(c))){
-            Toast.makeText(getApplicationContext(), "УРАААА" , Toast.LENGTH_SHORT).show();
         }
     }
 
-    @OnClick(R.id.button)
+    /*@OnClick(R.id.button)
     public void onClick(View view) {
         if (!proverka){
             a = random.nextInt(100) + 1;
@@ -121,5 +185,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             editText.setText(String.valueOf(c));
             proverka = false;
         }
-    }
+    }*/
 }
