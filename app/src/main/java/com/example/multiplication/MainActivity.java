@@ -1,6 +1,12 @@
 package com.example.multiplication;
 
+import android.content.Context;
 import android.content.res.Configuration;
+import android.media.MediaPlayer;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +16,8 @@ import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import junit.framework.Test;
+
 import java.util.Random;
 
 import butterknife.BindView;
@@ -17,6 +25,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.R.attr.x;
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
+import static android.media.RingtoneManager.TYPE_RINGTONE;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -32,30 +42,12 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.tv)
     TextView tv;
 
-    /*@BindView(R.id.btn0)
-    Button btn0;
-    @BindView(R.id.btn1)
-    Button btn1;
-    @BindView(R.id.btn2)
-    Button btn2;
-    @BindView(R.id.btn3)
-    Button btn3;
-    @BindView(R.id.btn4)
-    Button btn4;
-    @BindView(R.id.btn5)
-    Button btn5;
-    @BindView(R.id.btn6)
-    Button btn6;
-    @BindView(R.id.btn7)
-    Button btn7;
-    @BindView(R.id.btn8)
-    Button btn8;
-    @BindView(R.id.btn9)
-    Button btn9;*/
-
     int a, b, c, count;
-    public byte star = 0;// для звездочек ответа
+    public byte star = 0;// счетчик для открытия звездочек
     final static int[] sizeTable = {9, 99, 999, 9999, 99999};
+    Vibrator v;
+
+
 
     boolean proverka = false; // показать/скрыть ответ
 
@@ -92,10 +84,6 @@ public class MainActivity extends AppCompatActivity {
                 tv.setText("" + tv.getText() + "•");
             }
         }
-        /*for (int i = 0; i < c; i++){
-            tv.setText("" + tv.getText() + "♦");
-        }*/
-        //TODO значки как в поле чудес(закрытые)
     }
 
     static int countDigits(int x){
@@ -113,10 +101,24 @@ public class MainActivity extends AppCompatActivity {
         tv.setText(sb);
         if (star >= count){
             if(tv.getText().equals(String.valueOf(c))){
-                Toast.makeText(getApplicationContext(), "Правильно!!!" , Toast.LENGTH_SHORT).show();
+
+                /*try {
+                    Uri notify = RingtoneManager.getDefaultUri(RingtoneManager.ID_COLUMN_INDEX);
+                    Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notify);
+                    r.play();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }*/
+
+
+
+                /*MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.combo);
+                mp.start();*/
                 init();
             } else {
-                Toast.makeText(getApplicationContext(), "НЕ правильно!!!", Toast.LENGTH_SHORT).show();
+                v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(500);
+                //Toast.makeText(getApplicationContext(), "НЕ правильно!!!", Toast.LENGTH_SHORT).show();
                 init();
             }
         }
@@ -128,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.btn0:
                 checkAnswer((byte) 0);
+                //view.playSoundEffect(android.view.SoundEffectConstants.CLICK);
                 //tv.setText("" + tv.getText().toString().sububSequence() + 0);
                 break;
             case R.id.btn1:
