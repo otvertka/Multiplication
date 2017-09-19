@@ -1,9 +1,15 @@
 package com.example.multiplication;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -13,8 +19,12 @@ import butterknife.ButterKnife;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static java.lang.reflect.Array.getInt;
+
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "myLogs";
 
     Random random = new Random();
 
@@ -27,11 +37,16 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.tv)
     TextView tv;
 
-    int a, b, c, count;
+    SharedPreferences sPref;
+    byte keyLevel = 1;
+    int maxA = 10, maxB = 10;
+
+    int a, b, c, count; // множители(a,b), ответ, число знаков в ответе
     public byte star = 0;// счетчик для открытия звездочек
-    final static int[] sizeTable = {9, 99, 999, 9999, 99999};
+    final static int[] sizeTable = {9, 99, 999, 9999, 99999, 999999, 9999999};
     Vibrator v;
     StringBuffer sb;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +54,69 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        //Log.d(TAG, "HELLO!");
+        sPref = PreferenceManager.getDefaultSharedPreferences(this);
+
         init();
 
     }
 
+    @Override
+    protected void onResume() {
+        //Log.d(TAG, "" + sPref.getString("level", "1"));
+        keyLevel = Byte.parseByte(sPref.getString("level", "1"));
+        switch (keyLevel){
+            case 1:
+                maxA = 10;
+                maxB = 10;
+                break;
+            case 2:
+                maxA = 10;
+                maxB = 100;
+                break;
+            case 3:
+                maxA = 100;
+                maxB = 100;
+                break;
+            case 4:
+                maxA = 100;
+                maxB = 1000;
+                break;
+            case 5:
+                maxA = 1000;
+                maxB = 1000;
+                break;
+        }
+        init();
+        super.onResume();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add("Settings");
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+        return super.onOptionsItemSelected(item);
+    }
+
+    void init() {
+
+        a = random.nextInt(maxA);
+        tvNumber1.setText(String.valueOf(a));
+        b = random.nextInt(maxB);
+        tvNumber2.setText(String.valueOf(b));
+        c = a * b;
+
+        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+        clear();
+
+    }
     void clear(){
 
         tvResult.setText("");
@@ -61,19 +135,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         sb = new StringBuffer(tv.getText());
-
-    }
-    void init() {
-
-        a = random.nextInt(100);
-        tvNumber1.setText(String.valueOf(a));
-        b = random.nextInt(100);
-        tvNumber2.setText(String.valueOf(b));
-        c = a * b;
-
-        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-
-        clear();
 
     }
 

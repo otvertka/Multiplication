@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="listArray">
+        <item>easy(10*10)</item>
+        <item>medium(10*100)</item>
+        <item>hard(100*100)</item>
+        <item>genius(100*1000)</item>
+        <item>wtf?!unreal(1000*1000)</item>
+    </string-array>
+
+    <string-array name="listValues">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+</resources>
