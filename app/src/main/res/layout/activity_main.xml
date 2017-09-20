@@ -54,13 +54,15 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tvResult"
+        android:id="@+id/timerValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/button"
         android:layout_weight="1"
+        android:text="0:00:000"
         android:textColor="#000"
-        android:textSize="50dp" />
+        android:gravity="center_horizontal"
+        android:textSize="30dp" />
 
     <TextView
         android:id="@+id/tv"

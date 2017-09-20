@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -32,10 +35,10 @@ public class MainActivity extends AppCompatActivity {
     TextView tvNumber1;
     @BindView(R.id.tvNumber2)
     TextView tvNumber2;
-    @BindView(R.id.tvResult)
-    TextView tvResult;
     @BindView(R.id.tv)
     TextView tv;
+    @BindView(R.id.timerValue)
+    TextView tvTimer;
 
     SharedPreferences sPref;
     byte keyLevel = 1;
@@ -47,6 +50,23 @@ public class MainActivity extends AppCompatActivity {
     Vibrator v;
     StringBuffer sb;
 
+    /** for timer**/
+    long startTime = 0L, timeInMilliSeconds=0L;
+    Handler handler = new Handler();
+
+    Runnable updateTimerThread = new Runnable() {
+        @Override
+        public void run() {
+            timeInMilliSeconds = SystemClock.uptimeMillis() - startTime;
+            int secs = (int) (timeInMilliSeconds/1000);
+            int mins = secs/60;
+            secs%=60;
+            int milliSeconds = (int) (timeInMilliSeconds%1000);
+            tvTimer.setText("" + mins + ":" + String.format("%02d", secs) + ":"
+                                            + String.format("%03d", milliSeconds));
+            handler.postDelayed(this, 0);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
 
         init();
 
+        startTime = SystemClock.uptimeMillis();
+        handler.postDelayed(updateTimerThread, 0);
     }
 
     @Override
@@ -119,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
     }
     void clear(){
 
-        tvResult.setText("");
+        //tvResult.setText("");
         tv.setText("");
         tv.setTextSize(100);
         count = 0;
