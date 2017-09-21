@@ -1,6 +1,7 @@
 package com.example.multiplication;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,11 +19,9 @@ import android.widget.TextView;
 
 import java.util.Random;
 
-import butterknife.ButterKnife;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static java.lang.reflect.Array.getInt;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -44,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
     byte keyLevel = 1;
     int maxA = 10, maxB = 10;
 
-    int a, b, c, count; // множители(a,b), ответ, число знаков в ответе
+    byte counterExample = 0;
+    int a, b, c, numberSigns; // множители(a,b), ответ, число знаков в ответе
     public byte star = 0;// счетчик для открытия звездочек
     final static int[] sizeTable = {9, 99, 999, 9999, 99999, 999999, 9999999};
     Vibrator v;
@@ -128,29 +128,50 @@ public class MainActivity extends AppCompatActivity {
 
     void init() {
 
-        a = random.nextInt(maxA);
-        tvNumber1.setText(String.valueOf(a));
-        b = random.nextInt(maxB);
-        tvNumber2.setText(String.valueOf(b));
-        c = a * b;
+        if (counterExample == 0){
+            startTime = SystemClock.uptimeMillis();
+            handler.postDelayed(updateTimerThread, 0);
+        } else if (counterExample == 5){
+            handler.removeCallbacks(updateTimerThread);
 
-        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setMessage("Ваше время: " + tvTimer.getText())
+                    .setCancelable(false)
+                    .setNegativeButton("Рестарт", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            counterExample = 0;
+                            dialogInterface.cancel();
+                            init();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
 
-        clear();
+
+            a = random.nextInt(maxA);
+            tvNumber1.setText(String.valueOf(a));
+            b = random.nextInt(maxB);
+            tvNumber2.setText(String.valueOf(b));
+            c = a * b;
+
+            v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+            clear();
 
     }
     void clear(){
 
-        //tvResult.setText("");
         tv.setText("");
         tv.setTextSize(100);
-        count = 0;
+        numberSigns = 0;
         star = 0;
 
         for (int i = 0; ; i++){
             if (c <= sizeTable[i]) {
                 tv.setText("" + tv.getText() + "•");
-                count = i + 1;
+                numberSigns = i + 1;
                 break;
             } else {
                 tv.setText("" + tv.getText() + "•");
@@ -165,24 +186,14 @@ public class MainActivity extends AppCompatActivity {
         sb.replace(star, star+1, String.valueOf(x));
         star++;
         tv.setText(sb);
-        if (star >= count){
+        if (star >= numberSigns){
+
+            counterExample++;
             if(tv.getText().equals(String.valueOf(c))){
 
-                /*try {
-                    Uri notify = RingtoneManager.getDefaultUri(RingtoneManager.ID_COLUMN_INDEX);
-                    Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notify);
-                    r.play();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }*/
-
-
-
-                /*MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.combo);
-                mp.start();*/
                 init();
             } else {
-                v.vibrate(500);
+                v.vibrate(200);
                 init();
             }
         }
